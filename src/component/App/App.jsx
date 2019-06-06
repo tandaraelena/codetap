@@ -6,6 +6,7 @@ export const CodeTapAcademy = () => {
     <div>
       <h1>This is App jsx</h1>
       <h2>This is App jsx again</h2>
+      <Chat />
     </div>
   );
 };

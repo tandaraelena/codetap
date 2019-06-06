@@ -17,7 +17,7 @@ export const Chat = () => {
 
   return (
     <div>
-      <h1>Gigi kent</h1>
+      <h1>CodeTap Members Chat</h1>
       <pre>{JSON.stringify(channelMessageList, null, 2)}</pre>
     </div>
   );
