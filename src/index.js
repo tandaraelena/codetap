@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import { CodeTapAcademy } from "./component/App/App.jsx";
+import { CodeTapAcademy } from "./component/app/App.jsx";
 
 const tagId = "#react-will-render-here";
 
