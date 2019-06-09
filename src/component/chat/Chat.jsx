@@ -10,25 +10,31 @@ import { StyledChannelMessages } from "./chatStyle.js";
 export const Chat = () => {
   const [channelMessageList, setChannelMessageList] = useState([]);
   useEffect(() => {
-    // ditch fetch
-    axios.get(GET_GENERAL_CHANNEL_HISTORY).then(({ data }) => {
-      /* 
-      "client_msg_id": "0b368fa2-2e0c-466c-8c95-04a49b2f2f3c",
-      "type": "message",
-      "text": "So let’s see when can we schedule a time to do that.",
-      "user": "U1BLREAAE",
-      "ts": "1559728336.059200"
-      */
-      console.log(data);
-      setChannelMessageList(data.messages);
-    });
+    axios
+      .all([
+        axios.get(GET_GENERAL_CHANNEL_HISTORY),
+        axios.get(GET_ALL_USERS_LIST)
+      ])
+      .then(
+        axios.spread((messagesResponse, usersResponse) => {
+          const userList = usersResponse.data.members;
+          const messageList = messagesResponse.data.messages.map(message => {
+            const ceva = userList.filter(user => user.id === message.user);
+            return {
+              ...message,
+              niceName: ceva.reduce(a => a).real_name
+            };
+          });
+          setChannelMessageList(messageList);
+        })
+      );
   }, []);
 
   const renderChatMessages = () => {
-    return channelMessageList.map(({ text, ts, user }) => {
+    return channelMessageList.map(({ text, ts, niceName }) => {
       return (
         <StyledChannelMessages>
-          <div>{user}</div>
+          <div>{niceName}</div>
           <div>{text}</div>
           <div>{moment(ts * 1000).fromNow()}</div>
         </StyledChannelMessages>
