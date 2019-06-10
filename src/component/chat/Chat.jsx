@@ -9,6 +9,13 @@ import { StyledChannelMessages } from "./chatStyle.js";
 
 export const Chat = () => {
   const [channelMessageList, setChannelMessageList] = useState([]);
+  /* I will retrieve fullname or nickname from the profile.  
+    Sometimes I have display_name, sometimes real_name
+  */
+  const getNames = profile => {
+    const { display_name, real_name } = profile;
+    return display_name || real_name;
+  };
   useEffect(() => {
     axios
       .all([
@@ -26,25 +33,24 @@ export const Chat = () => {
             const pairedNiceIdList = mentionedUserId.map(FBI => {
               const name =
                 "@" +
-                userList
-                  .filter(user => user.id === FBI.slice(2, -1))
-                  .reduce(a => a).profile.display_name;
+                getNames(
+                  userList
+                    .filter(user => user.id === FBI.slice(2, -1))
+                    .reduce(a => a).profile
+                );
               return {
                 id: FBI,
                 name
               };
             });
 
-            console.log(pairedNiceIdList);
-
-            const niceName = something.reduce(a => a).profile.display_name;
+            const niceName = getNames(something.reduce(a => a).profile);
             let textToBeSplit = message.text;
             let text2List = [];
             pairedNiceIdList.forEach(pni => {
               const text2 = textToBeSplit.split(pni.id);
               if (!text2List.length) {
                 text2List = [...text2].reduce((a, c) => {
-                  console.log("ccccc", c);
                   return [
                     ...a,
                     {
@@ -64,7 +70,6 @@ export const Chat = () => {
                   if (t.type !== "span" || text2.length === 1) return t;
                   else if (text2.length > 1) {
                     const gigiKent = [...text2].reduce((a, c) => {
-                      console.log("ccccc", c);
                       return [
                         ...a,
                         {
@@ -101,7 +106,6 @@ export const Chat = () => {
                     );
                   })
               : message.text;
-            console.log("****", text2List.flatMap(z => z));
 
             return {
               ...message,
