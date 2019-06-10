@@ -6,6 +6,7 @@ import {
   GET_GENERAL_CHANNEL_HISTORY
 } from "./chatConstants";
 import { StyledChannelMessages } from "./chatStyle.js";
+import { UserSpan } from "./chatUserComponent";
 
 export const Chat = () => {
   const [channelMessageList, setChannelMessageList] = useState([]);
@@ -87,15 +88,7 @@ export const Chat = () => {
                     return type === "span" ? (
                       <span>{text}</span>
                     ) : (
-                      <user
-                        style={{
-                          margin: "0 0.4rem",
-                          color: "#1264a3",
-                          background: "#e8f5fa"
-                        }}
-                      >
-                        {text}
-                      </user>
+                      <UserSpan text={text} />
                     );
                   })
               : message.text;
@@ -112,7 +105,7 @@ export const Chat = () => {
   }, []);
 
   const renderChatMessages = () => {
-    return channelMessageList.map(({ text, ts, niceName, niceName2 }) => {
+    return channelMessageList.map(({ text, ts, niceName }) => {
       return (
         <StyledChannelMessages key={ts}>
           <div>{niceName}</div>
