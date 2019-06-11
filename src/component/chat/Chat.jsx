@@ -14,8 +14,11 @@ export const Chat = () => {
     Sometimes I have display_name, sometimes real_name
   */
   const getNames = profile => {
-    const { display_name, real_name } = profile;
-    return display_name || real_name;
+    const { display_name, real_name, image_48 } = profile;
+    return {
+      name: display_name || real_name,
+      avatar: image_48
+    };
   };
 
   const convertMessageToComponentData = (text2, pni) => {
@@ -55,14 +58,16 @@ export const Chat = () => {
                   userList
                     .filter(user => user.id === FBI.slice(2, -1))
                     .reduce(a => a).profile
-                );
+                ).name;
               return {
                 id: FBI,
                 name
               };
             });
 
-            const niceName = getNames(something.reduce(a => a).profile);
+            const niceNameAndAvatar = getNames(
+              something.reduce(a => a).profile
+            );
             let textToBeSplit = message.text;
             let text2List = [];
             pairedNiceIdList.forEach(pni => {
@@ -78,17 +83,18 @@ export const Chat = () => {
                     const gigiKent = convertMessageToComponentData(text2, pni);
                     return gigiKent.slice(0, -1);
                   }
+                  return t;
                 });
               }
             });
             const text = pairedNiceIdList.length
               ? text2List
                   .flatMap(z => z)
-                  .map(({ type, text }) => {
+                  .map(({ type, text }, key) => {
                     return type === "span" ? (
-                      <span>{text}</span>
+                      <span key={`${text}-${key}`}>{text}</span>
                     ) : (
-                      <UserSpan text={text} />
+                      <UserSpan key={`${text}-${key}`} text={text} />
                     );
                   })
               : message.text;
@@ -96,7 +102,8 @@ export const Chat = () => {
             return {
               ...message,
               text,
-              niceName
+              niceName: niceNameAndAvatar.name,
+              avatar: niceNameAndAvatar.avatar
             };
           });
           setChannelMessageList(messageList);
@@ -105,11 +112,12 @@ export const Chat = () => {
   }, []);
 
   const renderChatMessages = () => {
-    return channelMessageList.map(({ text, ts, niceName }) => {
+    return channelMessageList.map(({ text, ts, niceName, avatar }) => {
       return (
         <StyledChannelMessages key={ts}>
           <div>{niceName}</div>
           <div>{text}</div>
+          <div>{avatar}</div>
           <div>{moment(ts * 1000).fromNow()}</div>
         </StyledChannelMessages>
       );
