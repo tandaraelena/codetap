@@ -116,10 +116,11 @@ export const Chat = () => {
     return channelMessageList.map(({ text, ts, niceName, avatar }) => {
       return (
         <StyledChannelMessages key={ts}>
-          <div>{niceName}</div>
-          <div>{text}</div>
           <ChatAvatar imagePath={avatar} />
-          <div>{moment(ts * 1000).fromNow()}</div>
+          <div>
+            <b>{niceName}</b> {moment(ts * 1000).fromNow()}
+            <div>{text}</div>
+          </div>
         </StyledChannelMessages>
       );
     });
