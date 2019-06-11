@@ -7,6 +7,7 @@ import {
 } from "./chatConstants";
 import { StyledChannelMessages } from "./chatStyle.js";
 import { UserSpan } from "./chatUserComponent";
+import ChatAvatar from "./chatAvatar";
 
 export const Chat = () => {
   const [channelMessageList, setChannelMessageList] = useState([]);
@@ -117,7 +118,7 @@ export const Chat = () => {
         <StyledChannelMessages key={ts}>
           <div>{niceName}</div>
           <div>{text}</div>
-          <div>{avatar}</div>
+          <ChatAvatar imagePath={avatar} />
           <div>{moment(ts * 1000).fromNow()}</div>
         </StyledChannelMessages>
       );
