@@ -15,5 +15,13 @@ export const StyledChannelMessages = styled.div`
   &:nth-child(odd) {
     color: blue;
     direction: rtl;
+    /* grid-auto-flow: dense; */
+    &:nth-child(odd) {
+      color: red;
+      .text {
+        color: black;
+        direction: ltr;
+      }
+    }
   }
 `;
