@@ -107,21 +107,45 @@ export const Chat = () => {
               avatar: niceNameAndAvatar.avatar
             };
           });
-          setChannelMessageList(messageList);
+          const groupedMessageByUser = ungrouppedMessageList => {
+            let currentUser = ungrouppedMessageList[0].user;
+            let returnedCollection = [];
+            let currentCollection = [];
+            ungrouppedMessageList.forEach(message => {
+              if (currentUser === message.user) {
+                currentCollection = [...currentCollection, message];
+              } else {
+                currentUser = message.user;
+                returnedCollection = [...returnedCollection, currentCollection];
+                currentCollection = [message];
+              }
+            });
+            return returnedCollection;
+            // [1, 2, 3, 4, 5, 6, 7]
+            // [[1, 2], [3], [4], [5, 6, 7]]
+          };
+          console.log(messageList);
+          setChannelMessageList(groupedMessageByUser(messageList));
         })
       );
   }, []);
 
   const renderChatMessages = () => {
-    return channelMessageList.map(({ text, ts, niceName, avatar }) => {
+    return channelMessageList.map(channelMessageGrouped => {
       return (
-        <StyledChannelMessages key={ts}>
-          <ChatAvatar imagePath={avatar} />
-          <div>
-            <b>{niceName}</b> {moment(ts * 1000).fromNow()}
-            <div>{text}</div>
-          </div>
-        </StyledChannelMessages>
+        <div className="group">
+          {channelMessageGrouped.map(({ text, ts, niceName, avatar }) => {
+            return (
+              <StyledChannelMessages key={ts}>
+                <ChatAvatar imagePath={avatar} />
+                <div>
+                  <b>{niceName}</b> {moment(ts * 1000).fromNow()}
+                  <div>{text}</div>
+                </div>
+              </StyledChannelMessages>
+            );
+          })}
+        </div>
       );
     });
   };
