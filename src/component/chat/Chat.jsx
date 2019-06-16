@@ -119,7 +119,7 @@ export const Chat = () => {
           <ChatAvatar imagePath={avatar} />
           <div>
             <b>{niceName}</b> {moment(ts * 1000).fromNow()}
-            <div>{text}</div>
+            <div className="text">{text}</div>
           </div>
         </StyledChannelMessages>
       );
