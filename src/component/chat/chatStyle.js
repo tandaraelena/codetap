@@ -9,19 +9,4 @@ export const StyledChannelMessages = styled.div`
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
   grid-template-columns: 50px auto;
-  &:nth-child(even) {
-    color: green;
-  }
-  &:nth-child(odd) {
-    color: blue;
-    direction: rtl;
-    /* grid-auto-flow: dense; */
-    &:nth-child(odd) {
-      color: red;
-      .text {
-        color: black;
-        direction: ltr;
-      }
-    }
-  }
 `;
