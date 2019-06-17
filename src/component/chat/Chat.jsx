@@ -5,7 +5,12 @@ import {
   GET_ALL_USERS_LIST,
   GET_GENERAL_CHANNEL_HISTORY
 } from "./chatConstants";
-import { StyledChannelMessages } from "./chatStyle.js";
+import {
+  StyledChannelMessage,
+  StyledChannelMessagesGrouped,
+  StyledNickName,
+  Title
+} from "./chatStyle.js";
 import { UserSpan } from "./chatUserComponent";
 import ChatAvatar from "./chatAvatar";
 
@@ -133,27 +138,27 @@ export const Chat = () => {
   const renderChatMessages = () => {
     return channelMessageList.map(channelMessageGrouped => {
       return (
-        <div className="group">
-          {channelMessageGrouped.map(({ text, ts, niceName, avatar }) => {
+        <StyledChannelMessagesGrouped>
+          {channelMessageGrouped.map(({ text, ts, niceName, avatar }, key) => {
             return (
-              <StyledChannelMessages key={ts}>
-                <ChatAvatar imagePath={avatar} />
-                <div>
-                  <b>{niceName}</b> {moment(ts * 1000).fromNow()}
+              <StyledChannelMessage key={ts}>
+                <div className="grouped-elements">
+                  {!key && <ChatAvatar imagePath={avatar} />}
+                  {!key && <StyledNickName data-nice-name={niceName} />}
+                </div>
+                <div className="grouped-elements-text">
+                  <small>
+                    {moment(ts * 1000).fromNow()} {""}
+                  </small>
                   <div>{text}</div>
                 </div>
-              </StyledChannelMessages>
+              </StyledChannelMessage>
             );
           })}
-        </div>
+        </StyledChannelMessagesGrouped>
       );
     });
   };
 
-  return (
-    <div>
-      <h1>CodeTap Members Chat</h1>
-      {renderChatMessages()}
-    </div>
-  );
+  return <div>{renderChatMessages()}</div>;
 };
